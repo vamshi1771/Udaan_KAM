@@ -18,6 +18,9 @@ public class POC {
     @Column(name = "poc_id")
     private Long poc_id;
 
+    @Column(name = "restaurant_id")
+    private Long restaurantId;
+
     @Column(name = "poc_name")
     private String pocName;
 
