@@ -12,13 +12,9 @@ import java.util.Date;
 @Builder
 
 @Entity
-@Table(name = "performance_metrics") // will get
+@Table(name = "performance_metrics")
 public class PerformanceMetrics {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "performance_id")
-    private Long performanceId;
-
    @Column(name = "restaurant_id")
     private Long restaurantId;
 

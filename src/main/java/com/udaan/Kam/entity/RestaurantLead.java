@@ -30,6 +30,9 @@ public class RestaurantLead {
     @Column(name = "lead_status")
     private String leadStatus;
 
+    @Column(name = "call_frequency")
+    private Long callFrequencyInDays;
+
 
     private RestaurantLead(Builder builder) {
         this.restaurantId = builder.restaurantId;
@@ -37,6 +40,7 @@ public class RestaurantLead {
         this.location = builder.location;
         this.restaurantType = builder.restaurantType;
         this.leadStatus = builder.leadStatus;
+        this.callFrequencyInDays = builder.callFrequencyInDays;
     }
 
     public static class Builder {
@@ -45,6 +49,8 @@ public class RestaurantLead {
         private String location;
         private String restaurantType;
         private String leadStatus;
+        private Long callFrequencyInDays;
+
 
         public Builder setRestaurantId(Long restaurantId) {
             this.restaurantId = restaurantId;
@@ -68,6 +74,10 @@ public class RestaurantLead {
 
         public Builder setLeadStatus(String leadStatus) {
             this.leadStatus = leadStatus;
+            return this;
+        }
+        public Builder setCallFrequencyInDays(long days){
+            this.callFrequencyInDays = days;
             return this;
         }
 

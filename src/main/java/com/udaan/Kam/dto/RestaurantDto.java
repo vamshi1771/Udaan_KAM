@@ -13,6 +13,7 @@ public class RestaurantDto {
     private String location;
     private String restaurantType;
     private String leadStatus;
+    private Long callFrequency;
 
 
 }

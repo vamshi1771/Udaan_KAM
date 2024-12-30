@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -23,8 +24,8 @@ public class CallPlaning {
     private Long restaurantId;
 
     @Column(name = "call_frequency")
-    private String call_frequency;
+    private Long call_frequency;
 
     @Column(name = "last_call_date")
-    private Date lastCallDate;
+    private LocalDate lastCallDate;
 }
