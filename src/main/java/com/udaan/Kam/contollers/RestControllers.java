@@ -1,16 +1,13 @@
 package com.udaan.Kam.contollers;
 
-import com.udaan.Kam.dto.InteractionDto;
-import com.udaan.Kam.dto.RestaurantDto;
-import com.udaan.Kam.dto.RestaurantsToInteract;
+import com.udaan.Kam.dto.*;
 import com.udaan.Kam.entity.Location;
 import com.udaan.Kam.entity.POC;
 import com.udaan.Kam.entity.RestaurantLead;
 import com.udaan.Kam.services.CallPlaningService;
+import com.udaan.Kam.services.PerformanceMetricsService;
 import com.udaan.Kam.services.PocService;
-import com.udaan.Kam.services.implementation.InteractionServiceImpl;
-import com.udaan.Kam.services.implementation.PocServiceImpl;
-import com.udaan.Kam.services.implementation.RestaurantServiceImpl;
+import com.udaan.Kam.services.implementation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +24,11 @@ public class RestControllers {
     InteractionServiceImpl interactionService;
 
     @Autowired
-    CallPlaningService callPlaningService;
+    CallPlaningServiceImpl callPlaningService;
+
+    @Autowired
+    PerformanceServiceImp performanceServiceImp;
+
 
     @PostMapping("/register-restaurant")
     void registerRestaurant(@RequestBody RestaurantDto restaurantDto){
@@ -35,7 +36,7 @@ public class RestControllers {
     }
 
     @PostMapping("/register-poc")
-    void registerPoc(@RequestBody POC poc)
+    void registerPoc(@RequestBody PocDto poc)
     {
         pocService.registerPoc(poc);
     }
@@ -47,7 +48,6 @@ public class RestControllers {
 
     @GetMapping("/get-today-interactions")
     List<RestaurantsToInteract> getRestaurantsToInteract(){
-        LocalDate currentDate = LocalDate.now();
         return callPlaningService.getCalls();
     }
 
@@ -56,4 +56,8 @@ public class RestControllers {
         return restaurantService.getWeekPerforming();
     }
 
+    @GetMapping("/get-performance-metrics/{year}")
+    List<PerformanceDto> getPerformanceMetrics(@PathVariable Long year){
+        return performanceServiceImp.getPerformance(year);
+    }
 }

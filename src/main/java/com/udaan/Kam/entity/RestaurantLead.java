@@ -3,6 +3,8 @@ package com.udaan.Kam.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,9 +32,8 @@ public class RestaurantLead {
     @Column(name = "lead_status")
     private String leadStatus;
 
-    @Column(name = "call_frequency")
-    private Long callFrequencyInDays;
-
+    @OneToMany(mappedBy = "restaurantLead", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<POC> pocList = new ArrayList<>();
 
     private RestaurantLead(Builder builder) {
         this.restaurantId = builder.restaurantId;
@@ -40,7 +41,6 @@ public class RestaurantLead {
         this.location = builder.location;
         this.restaurantType = builder.restaurantType;
         this.leadStatus = builder.leadStatus;
-        this.callFrequencyInDays = builder.callFrequencyInDays;
     }
 
     public static class Builder {
@@ -49,7 +49,6 @@ public class RestaurantLead {
         private String location;
         private String restaurantType;
         private String leadStatus;
-        private Long callFrequencyInDays;
 
 
         public Builder setRestaurantId(Long restaurantId) {
@@ -74,10 +73,6 @@ public class RestaurantLead {
 
         public Builder setLeadStatus(String leadStatus) {
             this.leadStatus = leadStatus;
-            return this;
-        }
-        public Builder setCallFrequencyInDays(long days){
-            this.callFrequencyInDays = days;
             return this;
         }
 

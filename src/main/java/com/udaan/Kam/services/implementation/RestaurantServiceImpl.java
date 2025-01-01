@@ -28,16 +28,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional
     public void register(RestaurantDto restaurantDto) {
         RestaurantLead restaurant = new RestaurantLead.Builder()
-                .setRestaurantId(restaurantDto.getRestaurantId())
                 .setRestaurantName(restaurantDto.getRestaurantName())
                 .setLocation(restaurantDto.getLocation())
                 .setRestaurantType(restaurantDto.getRestaurantType())
                 .setLeadStatus("NEW")
                 .build();
-        restaurantRepository.save(restaurant);
+        RestaurantLead savedRestaurant = restaurantRepository.save(restaurant);
+
+        // Create and save the CallPlaning entity
         CallPlaning callPlaning = new CallPlaning();
-        callPlaning.setCall_frequency(restaurantDto.getCallFrequency());
-        callPlaning.setRestaurantId(restaurantDto.getRestaurantId());
+        callPlaning.setCallFrequency(restaurantDto.getCallFrequency());
+        callPlaning.setRestaurantLead(savedRestaurant); // Set the relationship
         callPlaningRepository.save(callPlaning);
     }
 

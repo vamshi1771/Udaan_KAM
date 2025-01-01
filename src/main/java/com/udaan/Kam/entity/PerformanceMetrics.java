@@ -3,6 +3,7 @@ package com.udaan.Kam.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -19,13 +20,13 @@ public class PerformanceMetrics {
     private Long restaurantId;
 
     @Column(name = "month")
-    private Date month;
+    private LocalDate date;
 
     @Column(name = "totalOrders") // total orders placed in a month by a restaurant
     private Long totalOrders;
 
 
-    @Column(name = "average_order_value") // maxvalue will be 10 and if it is under 5 UnderPerforming and 5 -7 good and 8-10 Excellent
+    @Column(name = "average_order_value") // average amount spend on orders
     private Long averageOrderValue;
 
 }

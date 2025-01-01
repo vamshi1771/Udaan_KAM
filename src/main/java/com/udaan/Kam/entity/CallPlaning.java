@@ -3,10 +3,7 @@ package com.udaan.Kam.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -20,11 +17,15 @@ import java.util.Date;
 @Table(name = "call_planing")
 public class CallPlaning {
     @Id
-    @Column(name = "restaurant_id")
-    private Long restaurantId;
+    private Long restaurantId; // This acts as both primary key and foreign key
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "restaurant_id")
+    private RestaurantLead restaurantLead;
 
     @Column(name = "call_frequency")
-    private Long call_frequency;
+    private Long callFrequency;
 
     @Column(name = "last_call_date")
     private LocalDate lastCallDate;

@@ -14,6 +14,4 @@ public class RestaurantDto {
     private String restaurantType;
     private String leadStatus;
     private Long callFrequency;
-
-
 }
