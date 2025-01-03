@@ -49,7 +49,7 @@ public class RestControllers {
         pocService.registerPoc(poc);
     }
 
-    @PostMapping("/add-interaction") // to add interaction happened with restaurant
+    @PostMapping("/add-interaction") // to add a interaction happened with restaurant
     void addInteraction(@RequestBody InteractionDto interactionDto){
         interactionService.makeInteraction(interactionDto);
     }

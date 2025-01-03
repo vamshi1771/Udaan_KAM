@@ -14,12 +14,4 @@ public class RestaurantDto {
     private String restaurantType;
     private String leadStatus;
     private Long callFrequency;
-
-    public RestaurantDto(Long restaurantId, String restaurantName, String location, String restaurantType, String leadStatus, Object o) {
-        this.restaurantId = restaurantId;
-        this.restaurantName = restaurantName;
-        this.location = location;
-        this.restaurantType = restaurantType;
-        this.leadStatus = leadStatus;
-    }
 }

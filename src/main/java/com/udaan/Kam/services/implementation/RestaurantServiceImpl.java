@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -24,6 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     InteractionsRepository interactionsRepository;
     @Autowired
     CallPlaningRepository callPlaningRepository;
+
     @Override
     @Transactional
     public void register(RestaurantDto restaurantDto) {
@@ -47,7 +49,19 @@ public class RestaurantServiceImpl implements RestaurantService {
         return null;
     }
 
-//    public List<RestaurantLead> getWeekPerforming(){
-////        restaurantRepository
-//    }
+    @Override
+    public List<RestaurantDto> getAllRestaurants() {
+        List<RestaurantLead> restaurantLeads = restaurantRepository.findAll();
+        return restaurantLeads.stream()
+                .map(lead -> new RestaurantDto(
+                        lead.getRestaurantId(),
+                        lead.getRestaurantName(),
+                        lead.getLocation(),
+                        lead.getRestaurantType(),
+                        lead.getLeadStatus(),
+                        null
+                ))
+                .collect(Collectors.toList());
+
+    }
 }

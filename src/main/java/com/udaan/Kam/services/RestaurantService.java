@@ -13,4 +13,6 @@ public interface RestaurantService {
 
     void register(RestaurantDto restaurantDto);
     public List<RestaurantLead> getWeekPerforming();
+
+    List<RestaurantDto> getAllRestaurants();
 }
