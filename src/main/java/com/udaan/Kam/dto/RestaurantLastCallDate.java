@@ -8,4 +8,6 @@ import java.time.LocalDate;
 public class RestaurantLastCallDate {
     private Long restaurantId;
     private LocalDate lastCallDate;
+    private String restaurantName;
+    private Long callFrequency;
 }

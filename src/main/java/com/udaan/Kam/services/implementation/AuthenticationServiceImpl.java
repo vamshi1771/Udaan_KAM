@@ -1,5 +1,6 @@
 package com.udaan.Kam.services.implementation;
 
+import com.udaan.Kam.dto.AuthResponseDto;
 import com.udaan.Kam.entity.Users;
 import com.udaan.Kam.repository.UserRepository;
 import com.udaan.Kam.services.AuthenticationService;
@@ -10,11 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
@@ -33,38 +33,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    TokenBlacklistService tokenBlacklistService;
+
     @Override
-    public Users register(Users user,HttpServletResponse response) {
+    public AuthResponseDto register(Users user, HttpServletResponse response) {
         user.setPassword(encoder.encode(user.getPassword()));
        Users registeredUser = userRepository.save(user);
-       if(registeredUser != null){
-           String token =   jwtService.generateToken(user.getUserName());
-           Cookie cookie = new Cookie("jwt_token", token);
-//           cookie.setHttpOnly(true);
-//           cookie.setSecure(true);
-           cookie.setPath("/");
-           cookie.setMaxAge(24 * 60 * 60);
-           response.addCookie(cookie);
-       }
-        return registeredUser;
+        String token =   jwtService.generateToken(user.getUserName());
+        return new AuthResponseDto(
+                token,
+                null,
+                registeredUser.getUserName(),
+                registeredUser.getRole(),
+                registeredUser.getUser_id(),
+                registeredUser.getEmail()
+        );
     }
 
     @Override
     public ResponseEntity<?> login(Users user, HttpServletResponse response) throws IllegalArgumentException {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
-            if (authentication.isAuthenticated()) {
-               String token =   jwtService.generateToken(user.getUserName());
-                Users loggedUser = userRepository.findByUserName(user.getUserName());
-
-                Cookie cookie = new Cookie("jwt_token", token);
-                cookie.setHttpOnly(true);
-                cookie.setSecure(true);
-                cookie.setPath("/");
-                cookie.setMaxAge(72 * 60 * 60);
-                response.addCookie(cookie);
-
-                return ResponseEntity.ok(loggedUser);
+            Users loggedUser = userRepository.findByUserName(user.getUserName());
+            if(authentication.isAuthenticated()){
+                String token =   jwtService.generateToken(user.getUserName());
+                System.out.println(loggedUser.getUser_id());
+                AuthResponseDto authResponseDto = new AuthResponseDto(
+                        token,
+                        null,
+                        loggedUser.getUserName(),
+                        loggedUser.getRole(),
+                        loggedUser.getUser_id(),
+                        loggedUser.getEmail()
+                );
+                return ResponseEntity.ok(authResponseDto);
             }
         }
         catch (Exception e){
@@ -73,6 +76,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Authentication failed: Invalid username or password.");
+    }
+
+    @Override
+    public String logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        String token = null;
+        String username = null;
+
+        if (authHeader != null && authHeader.startsWith("Bearer")) {
+            token = authHeader.substring(7);
+        }
+
+        if(token != null) {
+            tokenBlacklistService.blacklist(token);
+            return "Logout successful";
+        } else {
+            return "No active session found";
+        }
     }
 
 }

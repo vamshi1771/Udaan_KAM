@@ -9,7 +9,10 @@ import com.udaan.Kam.services.PocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PocServiceImpl implements PocService {
@@ -24,8 +27,7 @@ public class PocServiceImpl implements PocService {
         System.out.println(restaurantLead.isEmpty());
        if(restaurantLead.isPresent()) {
            RestaurantLead restaurantLead1 = restaurantLead.get();
-//           System.out.println(restaurantLead1.getRestaurantId());
-           POC poc1 = new POC.Builder()
+           POC poc1 = POC.builder()
                    .pocName(poc.getPocName())
                    .role(poc.getRole())
                    .contactNumber(poc.getContactNumber())
@@ -34,5 +36,20 @@ public class PocServiceImpl implements PocService {
                    .build();
            pocRepository.save(poc1);
        }
+    }
+
+    @Override
+    public List<PocDto> getPocs(Long restaurantId) {
+        List<POC> pocList =  pocRepository.findAllByRestaurantId(restaurantId);
+
+      return  pocList.stream()
+                .map(poc -> PocDto.builder()
+                        .pocId(poc.getPocId())
+                        .pocName(poc.getPocName())
+                        .contactNumber(poc.getContactNumber())
+                        .emailAddress(poc.getEmailAddress())
+                        .restaurantId(poc.getRestaurantLead().getRestaurantId())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

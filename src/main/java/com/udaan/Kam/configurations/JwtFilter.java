@@ -1,7 +1,10 @@
 package com.udaan.Kam.configurations;
 
+import com.udaan.Kam.gobalExceptions.exceptions.AuthException;
 import com.udaan.Kam.services.JWTService;
 import com.udaan.Kam.services.implementation.MyUserDetailsService;
+import com.udaan.Kam.services.implementation.TokenBlacklistService;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -28,6 +32,9 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     ApplicationContext context;
 
+    @Autowired
+    TokenBlacklistService tokenBlacklistService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
@@ -36,22 +43,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer")) {
             token = authHeader.substring(7);
-            username = jwtService.extractUserName(token);
         }
-        System.out.println(" token "+token );
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt_token".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        System.out.println("token" + token);
-        // Extract username from token if it exists
         if (token != null) {
-            username = jwtService.extractUserName(token);
+
+            try {
+                if(!tokenBlacklistService.isBlacklisted(token)) username = jwtService.extractUserName(token);
+            }
+            catch (SignatureException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Invalid Token. JWT signature does not match. Please, login again\"}");
+                return;
+            }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

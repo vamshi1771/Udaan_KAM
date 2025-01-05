@@ -35,7 +35,7 @@ public class InteractionServiceImpl implements InteractionService {
     @Override
     public void makeInteraction(InteractionDto interaction){
         Interactions interactions = new Interactions.Builder()
-                .setInteractedDate(LocalDate.now())
+                .setInteractedDate(interaction.getInteractedDate())
                 .setInteractionDetails(interaction.getInteractionDetails())
                 .setInteractionType(interaction.getInteractionType())
                 .setPocId(interaction.getPocId())
@@ -47,7 +47,7 @@ public class InteractionServiceImpl implements InteractionService {
             Orders order = new Orders.Builder()
                     .setRestaurantId(interaction.getRestaurantId())
                     .setOrderAmount(interaction.getOrderAmount())
-                    .setOrderDate(LocalDate.now())
+                    .setOrderDate(interaction.getInteractedDate())
                     .setOrderStatus(interaction.getOrderStatus())
                     .build();
             orderRepository.save(order);

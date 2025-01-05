@@ -51,10 +51,11 @@ public class RestControllers {
 
     @PostMapping("/add-interaction") // to add interaction happened with restaurant
     void addInteraction(@RequestBody InteractionDto interactionDto){
+        System.out.println("interactionDto => " +interactionDto);
         interactionService.makeInteraction(interactionDto);
     }
 
-    @GetMapping("/get-today-interactions") // to get all Interaction to be made for today's
+        @GetMapping("/get-today-interactions") // to get all Interaction to be made for today's
     List<RestaurantsToInteract> getRestaurantsToInteract(){
         return callPlaningService.getCalls();
     }
@@ -69,8 +70,11 @@ public class RestControllers {
         return performanceServiceImp.getPerformance(year);
     }
 
-    @GetMapping("/average-orders-month") // to get total orders in month and restaurant types
-
+    @GetMapping("/get-pocs/{restaurantId}")
+    List<PocDto> getPocs(@PathVariable Long restaurantId){
+        return pocService.getPocs(restaurantId);
+    }
+    @GetMapping("/average-orders-month") // to get total orders in month and restaurant type
     List<AverageOrdersPerMonth> getAverageOrder(){
         return orderService.getAverageOrders();
     }
