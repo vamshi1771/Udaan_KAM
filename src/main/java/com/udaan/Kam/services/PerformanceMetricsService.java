@@ -5,5 +5,5 @@ import com.udaan.Kam.dto.PerformanceDto;
 import java.util.List;
 
 public interface PerformanceMetricsService {
-    List<PerformanceDto> getPerformance(Long year);
+    List<PerformanceDto> getPerformance(Long year,Long restaurantId);
 }

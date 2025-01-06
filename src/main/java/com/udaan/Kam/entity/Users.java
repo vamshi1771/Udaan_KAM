@@ -13,7 +13,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users") // Authentication purpose
-@Check(constraints = "role IN ('ADMIN', 'CUSTOMER')")
+@Check(constraints = "role IN ('ADMIN', 'USER')")
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")

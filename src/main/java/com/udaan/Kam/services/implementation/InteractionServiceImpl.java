@@ -79,7 +79,7 @@ public class InteractionServiceImpl implements InteractionService {
 //            }
         }
             CallPlaning callPlaning = callPlaningRepository.getById(interaction.getRestaurantId());
-        callPlaning.setLastCallDate(LocalDate.now());
+        callPlaning.setLastCallDate(interaction.getInteractedDate());
         callPlaningRepository.save(callPlaning);
     }
 }

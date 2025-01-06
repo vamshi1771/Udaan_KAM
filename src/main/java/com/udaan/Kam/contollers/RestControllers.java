@@ -65,15 +65,16 @@ public class RestControllers {
         return restaurantService.getWeekPerforming();
     }
 
-    @GetMapping("/get-performance-metrics/{year}") // to get total orders made by each restaurant in each month of specified year
-    List<PerformanceDto> getPerformanceMetrics(@PathVariable Long year){
-        return performanceServiceImp.getPerformance(year);
+    @GetMapping("/get-performance-metrics/{year}/{restaurantId}") // to get total orders made by each restaurant in each month of specified year
+    List<PerformanceDto> getPerformanceMetrics(@PathVariable Long year, @PathVariable Long restaurantId){
+        return performanceServiceImp.getPerformance(year,restaurantId);
     }
 
     @GetMapping("/get-pocs/{restaurantId}")
     List<PocDto> getPocs(@PathVariable Long restaurantId){
         return pocService.getPocs(restaurantId);
     }
+
     @GetMapping("/average-orders-month") // to get total orders in month and restaurant type
     List<AverageOrdersPerMonth> getAverageOrder(){
         return orderService.getAverageOrders();

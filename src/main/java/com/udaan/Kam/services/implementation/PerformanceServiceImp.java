@@ -21,8 +21,9 @@ public class PerformanceServiceImp implements PerformanceMetricsService {
     RestaurantRepository restaurantRepository;
 
     @Override
-    public List<PerformanceDto> getPerformance(Long year) {
-        List<Object[]> rawData = orderRepository.findRestaurantOrdersByYear(year);
+    public List<PerformanceDto> getPerformance(Long year,Long RestaurantId) {
+
+        List<Object[]> rawData = orderRepository.findRestaurantOrdersByYear(year,RestaurantId);
 
         // Map to hold performance data grouped by restaurant ID
         Map<Long, Map<Integer, MonthOrderCount>> restaurantData = new HashMap<>();
