@@ -12,8 +12,6 @@ import java.util.Date;
 @ToString
 @Builder
 
-@Entity
-@Table(name = "performance_metrics")
 public class PerformanceMetrics {
     @Id
    @Column(name = "restaurant_id")

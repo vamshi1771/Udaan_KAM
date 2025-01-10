@@ -80,7 +80,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://example.com")); // Add frontend domains
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://kamfrontend.s3-website.eu-north-1.amazonaws.com")); // Add frontend domains
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Add allowed HTTP methods
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

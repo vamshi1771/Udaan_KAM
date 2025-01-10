@@ -8,7 +8,6 @@ import com.udaan.Kam.entity.PerformanceMetrics;
 import com.udaan.Kam.repository.CallPlaningRepository;
 import com.udaan.Kam.repository.InteractionsRepository;
 import com.udaan.Kam.repository.OrderRepository;
-import com.udaan.Kam.repository.PerformanceRepository;
 import com.udaan.Kam.services.InteractionService;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,8 @@ public class InteractionServiceImpl implements InteractionService {
     @Autowired
     CallPlaningRepository callPlaningRepository;
 
-    @Autowired
-    PerformanceRepository performanceRepository;
+//    @Autowired
+//    PerformanceRepository performanceRepository;
     @Transactional
     @Override
     public void makeInteraction(InteractionDto interaction){
